@@ -1,0 +1,10 @@
+*.Rhistory
+*.gpx
+novale*
+*.jpg
+*.png
+*.jpeg
+*.txt
+rsconnect*
+*.csv
+posts*
