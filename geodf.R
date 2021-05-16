@@ -1,7 +1,10 @@
 library(XML)
 library(geosphere)
+library(rgdal)
+library(sp)
 
-files <- list.files("data/")
+files <- list.files("data/", recursive = TRUE)
+files <- gsub(".*/", "", files)
 geolist <- list()
 
 if(file.exists("geodf.csv")){
@@ -12,7 +15,8 @@ if(file.exists("geodf.csv")){
 for(i in 1:length(files)){
   
   # Parse the GPX file
-  pfile <- htmlTreeParse(file = paste0("data/", files[i]), 
+  pfile <- htmlTreeParse(file = paste0("data/", substr(files[i], 1, 4), 
+                                       "/", files[i]), 
                          error = function(...) {}, useInternalNodes = T)
   
   # Get all coordinates
@@ -24,32 +28,22 @@ for(i in 1:length(files)){
   
   
   # Delete points that have a distance >100m with its consecutive one
-  for(j in 1:ncol(coords)){
-    tmp <- c()
-    if(j < ncol(coords)){
-      for(k in (j+1):ncol(coords)){
-        tmp <- c(tmp, distm(c(as.numeric(coords["lon", j]), 
-                              as.numeric(coords["lat", j])), 
-                            c(as.numeric(coords["lon", k]), 
-                              as.numeric(coords["lat",k])), 
-                            fun = distHaversine))
-      }
-      if(!is.na(which(tmp > 100)[1])){
-        coords <- coords[,c(1:j, ((which(tmp > 100)[1]+j)):ncol(coords))]
-      } else {
-        coords <- coords[,c(1:j, (which(tmp > 100)[1]+j))]
-      }
-    }
+  wp <- readOGR(paste0("data/", substr(files[i], 1, 4), 
+                       "/", files[i]), layer = "track_points")
+  hike.dists <- spDists(wp, segments=TRUE)
+  tmp <- cumsum(hike.dists)
+  idx <- c()
+  for(j in seq(0.1, sum(hike.dists), 0.1)){
+    idx <- c(idx, which.min(abs(j - tmp)))
   }
-  
-  coords <- coords[, colSums(is.na(coords)) != nrow(coords)]
+  coords <- coords[,idx]
   
   # Put everything in a dataframe and get rid of old variables
   geolist[[i]] <- data.frame(lat = as.numeric(coords["lat",]), 
                              lon = as.numeric(coords["lon",]),
                              file = files[i])
 }
-rm(files, pfile, coords, tmp, i, j, k)
+rm(files, pfile, coords, tmp, i, j)
 #plot(coords[1,], coords[2,], type = "l")
 
 
