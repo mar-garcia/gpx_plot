@@ -29,12 +29,12 @@ ui <- navbarPage(
                          multiple = TRUE),
              selectInput("country", "Country",
                          choices = levels(geodf$country),
-                         selected = "Italy", #levels(geodf$country),
+                         selected = c("Italy", "Others"), #levels(geodf$country), #
                          multiple = TRUE),
              selectInput("region", "Region",
                          choices = levels(geodf$region),
                          selected = c("Trentino", "Sud Tirolo",
-                                      "Lombardia", "Veneto", "Altres"), #levels(geodf$region),
+                                      "Lombardia", "Veneto", "Austria"), #levels(geodf$region),#
                          multiple = TRUE)
            ) # close absolutePanel-controls
   ), # close tabPanel-Map
