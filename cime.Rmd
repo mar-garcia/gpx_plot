@@ -11,7 +11,9 @@ for(i in seq(nrow(cime))){
     "' target='_blank'>", paste0("link-", seq(length(unlist(strsplit(cime$enllac[i], "; "))))),"</a>"), 
     collapse = "\n")
 }
-cime <- cime[order(cime$Regió, cime$Localitat, cime$Cim, cime$Altitud),]
+cime$Localitat <- paste0("<a href='https://outdoorbreaks.blogspot.com/search/label/", cime$Localitat, "' target='_blank'>", cime$Localitat, "</a>")
+cime$Regio <- paste0("<a href='https://outdoorbreaks.blogspot.com/search/label/", cime$Regio, "' target='_blank'>", cime$Regio, "</a>")
+cime <- cime[order(cime$Regio, cime$Localitat, cime$Cim, cime$Altitud),]
 datatable(cime, filter = list(position = "top"), 
           options = list(pageLength = nrow(cime), dom = 't'), rownames= FALSE,
           colnames = c("Cim", "Altitud (m.)", "Localitat", "Regió", "enllaç"), escape = FALSE)
