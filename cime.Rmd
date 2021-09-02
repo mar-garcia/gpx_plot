@@ -13,7 +13,7 @@ for(i in seq(nrow(cime))){
 }
 cime <- cime[order(cime$Regió, cime$Localitat, cime$Cim, cime$Altitud),]
 datatable(cime, filter = list(position = "top"), 
-          options = list(pageLength = nrow(cime)), rownames= FALSE,
+          options = list(pageLength = nrow(cime), dom = 't'), rownames= FALSE,
           colnames = c("Cim", "Altitud (m.)", "Localitat", "Regió", "enllaç"), escape = FALSE)
 ```
 
