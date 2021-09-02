@@ -1,0 +1,19 @@
+---
+output: html_document
+---
+
+```{r, echo=FALSE}
+library(DT)
+cime <- read.csv("cime.csv")
+for(i in seq(nrow(cime))){
+  cime$enllac[i] <- paste(paste0(
+    "<a href='", unlist(strsplit(cime$enllac[i], "; ")),
+    "' target='_blank'>", unlist(strsplit(cime$enllac[i], "; ")),"</a>"), 
+    collapse = "\n")
+}
+cime <- cime[order(cime$Regió, cime$Localitat, cime$Cim, cime$Altitud),]
+datatable(cime, filter = list(position = "top"), 
+          options = list(pageLength = nrow(cime)), rownames= FALSE,
+          colnames = c("Cim", "Altitud (m.)", "Localitat", "Regió", "enllaç"), escape = FALSE)
+```
+
