@@ -6,16 +6,18 @@ output: html_document
 library(DT)
 cime <- read.csv("cime.csv")
 for(i in seq(nrow(cime))){
-  cime$enllac[i] <- paste(paste0(
-    "<a href='", unlist(strsplit(cime$enllac[i], "; ")),
-    "' target='_blank'>", paste0("link-", seq(length(unlist(strsplit(cime$enllac[i], "; "))))),"</a>"), 
+  cime$Enllac[i] <- paste(paste0(
+    "<a href='", unlist(strsplit(cime$Enllac[i], "; ")),
+    "' target='_blank'>", paste0("link-", seq(length(unlist(strsplit(cime$Enllac[i], "; "))))),"</a>"), 
     collapse = "\n")
 }
 cime$Localitat <- paste0("<a href='https://outdoorbreaks.blogspot.com/search/label/", cime$Localitat, "' target='_blank'>", cime$Localitat, "</a>")
+cime$Localitat<- gsub("label/Courmayeur", "label/Aosta", cime$Localitat)
+cime$Localitat <- gsub("label/Ledro", "label/Garda", cime$Localitat)
 cime$Regio <- paste0("<a href='https://outdoorbreaks.blogspot.com/search/label/", cime$Regio, "' target='_blank'>", cime$Regio, "</a>")
-cime <- cime[order(cime$Regio, cime$Localitat, cime$Cim, cime$Altitud),]
-datatable(cime, filter = list(position = "top"), 
+cime <- cime[order(cime$Regio, cime$Provincia, cime$Localitat, cime$Cim, cime$Altitud),]
+datatable(cime[,-5], filter = list(position = "top"), 
           options = list(pageLength = nrow(cime), dom = 't'), rownames= FALSE,
-          colnames = c("Cim", "Altitud (m.)", "Localitat", "Regió", "enllaç"), escape = FALSE)
+          colnames = c("Cim", "Altitud (m.)", "Localitat", "Provincia", "Enllaç"), escape = FALSE)
 ```
 
