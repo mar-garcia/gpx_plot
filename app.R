@@ -1,13 +1,13 @@
 library(shiny)
 library(leaflet)
 library(dplyr)
+library(RColorBrewer)
 
 geodf <- read.csv("geodf.csv")
 geofiles <- read.csv("geofiles.csv")
 geodf <- merge(geodf, geofiles, by = "file")
 rm(geofiles)
-geodf$color <- c("#DF536B", "#61D04F", "#2297E6", "#28E2E5", 
-                 "#CD0BBC", "#F5C710")[factor(geodf$type)]
+geodf$color <- c(brewer.pal(length(unique(geodf$type))+1, "Set1")[-3])[factor(geodf$type)]
 geodf$type <- factor(geodf$type)
 geodf$country <- factor(geodf$country)
 geodf$region <- factor(geodf$region)
@@ -29,12 +29,13 @@ ui <- navbarPage(
                          multiple = TRUE),
              selectInput("country", "Country",
                          choices = levels(geodf$country),
-                         selected = c("Italy", "Others"), #levels(geodf$country), #
+                         selected = "Italy",#c("Italy", "Others"), #levels(geodf$country), #
                          multiple = TRUE),
              selectInput("region", "Region",
                          choices = levels(geodf$region),
                          selected = c("Trentino", "Sud Tirolo",
-                                      "Lombardia", "Veneto", "Austria"), #levels(geodf$region),#
+                                      "Lombardia", "Veneto", "Austria",
+                                      "Bergamo", "Brescia"), #levels(geodf$region),#
                          multiple = TRUE)
            ) # close absolutePanel-controls
   ), # close tabPanel-Map

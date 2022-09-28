@@ -16,17 +16,13 @@ geofiles_new$month <- substr(geofiles_new$file, 5, 6)
 geofiles_new$day <- substr(geofiles_new$file, 7, 8)
 geofiles_new$abr <- substr(geofiles_new$file, 10, 100)
 geofiles_new$abr <- gsub(".gpx", "", geofiles_new$abr)
-geofiles_new$type <- c(
-  rep("walk",4), rep("others", 2), "walk", "others", rep("others", 3), 
-  "walk", "ski", "walk", rep("others",5), rep("walk",5)) # walk - ski - others
+geofiles_new$type <- geofiles_new$subtype <- geofiles_new$country <- geofiles_new$region <- geofiles_new$tags <-rep("x", nrow(geofiles_new))
+geofiles_new$type <- c("ski", "walk", rep("ski",4), rep("walk", 4), rep("ski", 8))  # walk - ski - others
 # run - hike - climb - ferrata - 
 # bike - alpinism - scialpinismo - ski alpino - ski touring - trekking - walk
-geofiles_new$subtype <- c(
-  rep("run", 3), "hike", rep("climb", 2), "run", "bike", rep("ski touring", 2), 
-  "climb", "hike", "ski touring", "run", "climb", rep("bike", 2), rep("climb", 2), 
-  rep("hike", 2), "walk", rep("hike", 2))
-geofiles_new$country <- c(rep("Italy", 19), rep("Catalunya", 5))
-geofiles_new$region <- c(rep("Trentino", 19), rep("Penedes", 2), rep("Others", 2), "Penedes")
+geofiles_new$subtype <- c("ski touring", "hike", "scialpinismo", "ski touring", "ski alpino", "sci fondo", rep("ferrata", 2), rep("hike", 2), "ski touring", rep("ski alpino", 2), "scialpinismo", rep("ski touring", 4))
+geofiles_new$country <- "Italy"#c(rep("Italy", 10))
+geofiles_new$region <- "Trentino"#c(rep("Trentino", 3), rep("Brescia", 5), rep("Trentino", 2))
 geofiles_new$tags <- "x"
 for(i in 1:nrow(geofiles_new)){
   geofiles_new$marker_lat[i] <- mean(geodf$lat[geodf$file == geofiles_new$file[i]])
